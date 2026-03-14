@@ -1,0 +1,3 @@
+rootProject.name = 'service-discovery'
+
+include 'eureka-server'
