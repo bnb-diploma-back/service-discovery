@@ -18,9 +18,6 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
 
-      - name: Build JAR with Gradle
-        run: ./gradlew :eureka-server:clean :eureka-server:bootJar
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -28,8 +25,4 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./eureka-server
-          push: ${{ github.event_name == 'push' }}
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/bnb-diploma-discovery:latest
+        run: ./gradlew :eureka-server:bootBuildImage -PdockerImageTag=latest -PdockerUsername=${{ secrets.DOCKER_HUB_USERNAME }} --publishImage
