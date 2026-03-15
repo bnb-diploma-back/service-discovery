@@ -11,7 +11,7 @@ bootBuildImage {
 
     builder = "paketobuildpacks/builder-jammy-tiny"
     createdDate = "now"
-    imageName = "bnb-diploma-config-server:${dockerImageTag}"
+    imageName = "bnb-diploma-discovery:${dockerImageTag}"
     environment = ["BP_NATIVE_IMAGE": "false",
                    "BP_JVM_VERSION" : "25"]
 }
