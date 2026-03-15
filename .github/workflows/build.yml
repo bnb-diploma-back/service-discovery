@@ -24,5 +24,18 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Build and push Docker image
-        run: ./gradlew :eureka-server:bootBuildImage -PdockerImageTag=latest -PdockerUsername=${{ secrets.DOCKER_HUB_USERNAME }} --publishImage
+      - name: Build Docker image
+        run: ./gradlew :eureka-server:bootBuildImage -PdockerImageTag=latest
+
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push'
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Tag and push Docker image
+        if: github.event_name == 'push'
+        run: |
+          docker tag bnb-diploma-discovery:latest ${{ secrets.DOCKER_HUB_USERNAME }}/bnb-diploma-discovery:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/bnb-diploma-discovery:latest
